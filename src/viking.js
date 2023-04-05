@@ -22,7 +22,7 @@ class Viking extends Soldier {
         this.health = this.health - damage;
         if(this.health > 0){
         return `${this.name} has received ${damage} points of damage`;}
-        if(this.health === 0){return `${this.name} has died in act of combat`;}
+        else if(this.health <= 0){return `${this.name} has died in act of combat`;}
     }
     battleCry(){
         return "Odin Owns You All!";
@@ -34,7 +34,7 @@ class Saxon extends Soldier {
     receiveDamage(damage){
         this.health = this.health - damage;
         if(this.health > 0){return `A Saxon has received ${damage} points of damage`;}
-        if(this.health === 0){return `A Saxon has died in combat`;}
+        if(this.health <= 0){return 'A Saxon has died in combat';}
     }
 }
 
@@ -53,27 +53,19 @@ class War {
     vikingAttack(){
         let randomSaxon = Math.floor(Math.random() * this.saxonArmy.length);
         let randomViking = Math.floor(Math.random() * this.vikingArmy.length);
-        this.saxonArmy[randomSaxon].receiveDamage(this.vikingArmy[randomViking].strength);
+        let result = this.saxonArmy[randomSaxon].receiveDamage(this.vikingArmy[randomViking].strength);
         const saxonAlive = this.saxonArmy.filter(saxons => saxons.health > 0);
         const saxonDead = this.saxonArmy.filter(saxons => saxons.health === 0);
         this.saxonArmy = saxonAlive;
-
-
-        if(saxonDead.length > 0){return `A Saxon has received ${this.vikingArmy[randomViking].strength} points of damage`;}
-        if(saxonDead.length === 0){return `A Saxon has died in combat`;}
-        // return receiveDamage();
+        return result;
     }
     saxonAttack(){
         let randomSaxon = Math.floor(Math.random() * this.saxonArmy.length);
         let randomViking = Math.floor(Math.random() * this.vikingArmy.length);
-        let vikingClone = this.vikingArmy;
-        this.vikingArmy[randomViking].receiveDamage(this.saxonArmy[randomSaxon].strength);
+        let result = this.vikingArmy[randomViking].receiveDamage(this.saxonArmy[randomSaxon].strength);
         const vikingsAlive = this.vikingArmy.filter(vikings => vikings.health > 0);
-        const vikingDead = this.vikingArmy.filter(vikings => vikings.health === 0);
         this.vikingArmy = vikingsAlive;
-
-        if(vikingDead.length === 0){return `${vikingClone[randomViking].name} has received ${this.saxonArmy[randomSaxon].strength} points of damage`;}
-        if(vikingDead.length > 0){return `${vikingClone[randomViking].name} has died in act of combat`;}
+        return result;
     }
     showStatus(){
         if (this.saxonArmy.length === 0){return "Vikings have won the war of the century!";}
